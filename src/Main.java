@@ -17,10 +17,14 @@ public class Main {
         //  - а также эпик с двумя подзадачами
         Epic epic1 = new Epic("epic 1", "epic 1 dsc");
         manager.addNewEpic(epic1);
+        System.out.println("0 *** Список подзадач эпика (у эпика нет подзадач): " + manager.getEpicSubtasks(epic1.getId()));
         Subtask subtask1ForEpic1 = new Subtask("name subtask1", "descr1 Epic 1", epic1.getId());
         Subtask subtask2ForEpic1 = new Subtask("name subtask2", "descr2 Epic 1", epic1.getId());
         manager.addNewSubtask(subtask1ForEpic1);
         manager.addNewSubtask(subtask2ForEpic1);
+        System.out.println("0 *** Список подзадач эпика (у эпика есть подзадачи): " + manager.getEpicSubtasks(epic1.getId()));
+        System.out.println("0 *** Список подзадач эпика (у несуществующего эпика): " + manager.getEpicSubtasks(-1));
+
         //   - и эпик с одной подзадачей.
         Epic epic2 = new Epic("epic 2", "epic 2 dsc");
         manager.addNewEpic(epic2);
