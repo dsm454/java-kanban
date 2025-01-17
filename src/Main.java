@@ -8,7 +8,7 @@ import manager.*;
 public class Main {
 
     public static void main(String[] args) {
-        TasksManager manager = new TasksManager();
+        TasksManager manager = Managers.getDefault();
         // Создайте - две задачи,
         Task task1 = new Task("Задача 1", "Описание задачи 1");
         Task task2 = new Task("Задача 2", "Описание задачи 2");
@@ -56,5 +56,35 @@ public class Main {
         System.out.println("3 *** Все Подзадачи: " + manager.getSubtasks());
         System.out.println("-".repeat(40));
 
+        manager.getTask(2);
+        manager.getTask(2);
+        manager.getTask(2);
+
+        printAllTasksAndHistory(manager);
     }
+
+    private static void printAllTasksAndHistory(TasksManager manager) {
+        System.out.println(" ### Задачи:");
+        for (Task task : manager.getTasks()) {
+            System.out.println(task);
+        }
+        System.out.println(" ### Эпики:");
+        for (Task epic : manager.getEpics()) {
+            System.out.println(epic);
+
+            for (Task task : manager.getEpicSubtasks(epic.getId())) {
+                System.out.println("--> " + task);
+            }
+        }
+        System.out.println(" ### Подзадачи:");
+        for (Task subtask : manager.getSubtasks()) {
+            System.out.println(subtask);
+        }
+
+        System.out.println(" ### История:");
+        for(int i = 0; i < manager.getHistory().size(); i++) {
+            System.out.println((i+1) + " - " + manager.getHistory().get(i));
+        }
+    }
+
 }

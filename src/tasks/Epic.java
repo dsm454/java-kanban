@@ -26,15 +26,6 @@ public class Epic extends Task {
     public void clearSubtaskIds(){ subtaskIds.clear(); }
 
     @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Epic epic = (Epic) o;
-        return Objects.equals(subtaskIds, epic.subtaskIds);
-    }
-
-    @Override
     public String toString() {
         return "Epic{" +
                 "id=" + id +
