@@ -16,7 +16,7 @@ class TaskTest {
     void shouldBeTasksNotEqualIfTheirIdNotEqual() {
         Task task1 = new Task("Задача  1","Описание задачи  1", 1);
         Task task2 = new Task("Задача  1","Описание задачи  1", 2);
-        assertNotEquals(task1, task2, "Задачи не должны быть равны, если равны их id");
+        assertNotEquals(task1, task2, "Задачи не должны быть равны, если не равны их id");
     }
 
 

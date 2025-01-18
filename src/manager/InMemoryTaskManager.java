@@ -131,8 +131,6 @@ public class InMemoryTaskManager implements TasksManager {
         if(epics.containsKey(newEpic.getId())){
             epics.get(newEpic.getId()).setName(newEpic.getName());
             epics.get(newEpic.getId()).setDescription(newEpic.getDescription());
-        } else {
-            System.out.println("Нет такого Эпика: " + newEpic.getId());
         }
     }
 
