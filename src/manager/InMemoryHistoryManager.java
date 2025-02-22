@@ -1,6 +1,7 @@
 package manager;
 
 import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +26,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    private void removeNode(Node node){
+    private void removeNode(Node node) {
         Node prevNode = node.prev;
         Node nextNode = node.next;
-        if (prevNode == null && nextNode == null ){ // удаляем единственную ноду
+        if (prevNode == null && nextNode == null) { // удаляем единственную ноду
             nodeMap.remove(node.task.getId());
             head = null;
             tail = null;
             node = null;
             return;
         }
-        if (prevNode == null && nextNode != null){ // удаляем голову
+        if (prevNode == null && nextNode != null) { // удаляем голову
             nextNode.prev = null;
             head = nextNode;
         } else if (prevNode != null && nextNode != null) { // внутренняя Нода
@@ -63,7 +64,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             oldTail.next = newNode;
         }
 
-        if(nodeMap.containsKey(idTask)) {
+        if (nodeMap.containsKey(idTask)) {
             removeNode(nodeMap.get(idTask));
         }
 
@@ -73,7 +74,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void removeTask(int id) {
-        if(!nodeMap.containsKey(id)){
+        if (!nodeMap.containsKey(id)) {
             return;
         } else {
             removeNode(nodeMap.get(id));

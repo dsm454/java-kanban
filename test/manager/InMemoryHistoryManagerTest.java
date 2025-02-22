@@ -46,7 +46,7 @@ class InMemoryHistoryManagerTest {
         manager.getSubtask(subtask2.getId());
         manager.getSubtask(subtask2.getId());
 
-        assertEquals(5,manager.getHistory().size(), "История просмотров не должна" +
+        assertEquals(5, manager.getHistory().size(), "История просмотров не должна" +
                 " содержать дублей просмотров (вызовов getTask() )");
 
         assertEquals("Подзадача 2", manager.getHistory().get(0).getName(),
@@ -66,7 +66,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldClearHistoryAfterDeleteAllTasks(){
+    void shouldClearHistoryAfterDeleteAllTasks() {
         manager.getTask(task1.getId());
         manager.getTask(task2.getId());
         manager.getSubtask(subtask1.getId());
@@ -81,7 +81,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldDeleteAndAddTasksCorrectHistory(){
+    void shouldDeleteAndAddTasksCorrectHistory() {
         manager.getTask(task1.getId());
         manager.getSubtask(subtask1.getId());
         manager.getSubtask(subtask2.getId());

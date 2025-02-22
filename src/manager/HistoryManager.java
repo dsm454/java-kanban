@@ -1,6 +1,7 @@
 package manager;
 
 import tasks.Task;
+
 import java.util.List;
 
 public interface HistoryManager {
@@ -8,5 +9,6 @@ public interface HistoryManager {
     List<Task> getHistory();
 
     void addTask(Task task);
+
     void removeTask(int id);
 }

@@ -58,6 +58,7 @@ public class Main {
         System.out.println("Удален эпик с тремя подзадачами, убедиться, что из истории удалился как сам эпик, так и все его подзадачи.");
         printHistory(manager);
     }
+
     private static void printAllTasks(TasksManager manager) {
         System.out.println(" ### Задачи:");
         for (Task task : manager.getTasks()) {
@@ -80,11 +81,11 @@ public class Main {
     private static void printHistory(TasksManager manager) {
         System.out.println("-".repeat(40));
         System.out.println(" ### История:");
-        for(int i = 0; i < manager.getHistory().size(); i++) {
-            System.out.println((i+1) + " - " + manager.getHistory().get(i));
+        for (int i = 0; i < manager.getHistory().size(); i++) {
+            System.out.println((i + 1) + " - " + manager.getHistory().get(i));
         }
         System.out.println("Количество просмотров в истории " + manager.getHistory().size());
         System.out.println("Количество объектов в менеджере " + (manager.getSubtasks().size() + manager.getEpics().size() + manager.getTasks().size()));
         System.out.println("-".repeat(40));
-        }
+    }
 }
