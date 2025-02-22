@@ -8,6 +8,8 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
@@ -83,4 +85,27 @@ class InMemoryTaskManagerTest {
         assertEquals(task.getStatus(), taskFromManager.getStatus(), "Статусы задач должны совпадать");
     }
 
+    //Внутри эпиков не должно оставаться неактуальных id подзадач.
+    @Test
+    void shouldInEpicNoIdNotActualSubtasks(){
+        Epic epic1 = new Epic("Эпик 1", "Эпик 1 Описание");
+        manager.addNewEpic(epic1);
+        Subtask subtask1ForEpic1 = new Subtask("Подзадача 1", "Подзадача 1 для Epic 1", epic1.getId());
+        Subtask subtask2ForEpic1 = new Subtask("Подзадача 2", "Подзадача 2 для Epic 1", epic1.getId());
+        Subtask subtask3ForEpic1 = new Subtask("Подзадача 3", "Подзадача 3 для Epic 1", epic1.getId());
+        manager.addNewSubtask(subtask1ForEpic1);
+        manager.addNewSubtask(subtask2ForEpic1);
+        manager.addNewSubtask(subtask3ForEpic1);
+
+        int idSubtask1ForEpic1 = subtask1ForEpic1.getId();
+        int idSubtask2ForEpic1 = subtask2ForEpic1.getId();
+
+        manager.deleteSubtask(idSubtask1ForEpic1);
+        manager.deleteSubtask(idSubtask2ForEpic1);
+        // Список id подзадач эпика после удаления 2-х подзадач
+        ArrayList<Integer>  arrayListIdsSubtasks =  manager.getEpic(epic1.getId()).getSubtaskIds();
+        assertTrue(arrayListIdsSubtasks.contains(subtask3ForEpic1.getId()), "Подзадача 3 должна быть в списке подзадач эпика.");
+        assertFalse(arrayListIdsSubtasks.contains(subtask1ForEpic1.getId()), "Подзадачи 1 не должно быть в списке подзадач эпика.");
+        assertFalse(arrayListIdsSubtasks.contains(subtask2ForEpic1.getId()), "Подзадачи 2 не должно быть в списке подзадач эпика.");
+    }
 }

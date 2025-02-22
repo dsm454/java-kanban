@@ -1,7 +1,5 @@
 package tasks;
 
-import java.util.Objects;
-
 public class Task {
     protected String name;        // Название, описывающее задачу (например, «Переезд»).
     protected String description; // Описание
@@ -17,7 +15,6 @@ public class Task {
         this(name, description);
         this.id = id;
     }
-
     public Task(String name, String description, int id, Status status) {
         this(name, description, id);
         this.status = status;
