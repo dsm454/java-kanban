@@ -94,5 +94,4 @@ class InMemoryHistoryManagerTest {
         manager.deleteEpic(epic1.getId()); // после удаления эпика удаляются все его подзадачи
         assertEquals(0, manager.getHistory().size(), "Количество просмотров должно быть равно 0.");
     }
-
 }
