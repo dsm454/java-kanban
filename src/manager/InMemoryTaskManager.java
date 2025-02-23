@@ -81,20 +81,10 @@ public class InMemoryTaskManager implements TasksManager {
         return subtask;
     }
 
-    private Subtask getSubtaskWithoutHistory(int id) {
-        final Subtask subtask = subtasks.get(id);
-        return subtask;
-    }
-
     @Override
     public Epic getEpic(int id) {
         final Epic epic = epics.get(id);
         historyManager.addTask(epic);
-        return epic;
-    }
-
-    private Epic getEpicWithoutHistory(int id) {
-        final Epic epic = epics.get(id);
         return epic;
     }
 
@@ -110,7 +100,7 @@ public class InMemoryTaskManager implements TasksManager {
     @Override
     public Integer addNewSubtask(Subtask subtask) {
         // 1) Проверить существование Epic
-        Epic epic = getEpicWithoutHistory(subtask.getEpicId());
+         Epic epic = epics.get(subtask.getEpicId());
         if (epic == null) {
             return -1;
         } else {
@@ -213,21 +203,18 @@ public class InMemoryTaskManager implements TasksManager {
 
     //-------------------------------------------------------
 //@Override
-    public void updateEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         Set<Status> statusesSubtasks = new HashSet<>();
         for (Integer id : epic.getSubtaskIds()) {
-            statusesSubtasks.add(getSubtaskWithoutHistory(id).getStatus());
+            statusesSubtasks.add(subtasks.get(id).getStatus());
         }
-
         if (epic.getSubtaskIds().isEmpty()
                 || (statusesSubtasks.size() == 1 && statusesSubtasks.contains(Status.NEW))) {
             /*если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW.*/
             epic.setStatus(Status.NEW);
-            return;
         } else if (statusesSubtasks.size() == 1 && statusesSubtasks.contains(Status.DONE)) {
             /*если все подзадачи имеют статус DONE, то и эпик считается завершённым — со статусом DONE.*/
             epic.setStatus(Status.DONE);
-            return;
         } else {
             epic.setStatus(Status.IN_PROGRESS);
         }
