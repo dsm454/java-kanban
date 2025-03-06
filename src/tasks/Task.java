@@ -64,6 +64,11 @@ public class Task {
         return id == task.id;
     }
 
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
+
     @Override
     public String toString() {
         return "Task{" +

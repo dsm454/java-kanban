@@ -8,10 +8,10 @@ import tasks.Task;
 import java.util.*;
 
 public class InMemoryTaskManager implements TasksManager {
-    private int generatorId = 0;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();       // id task    - task
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>(); // id subtask - subtask
-    private final HashMap<Integer, Epic> epics = new HashMap<>();       // id epic    - epic
+    protected int generatorId = 0;
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();       // id task    - task
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>(); // id subtask - subtask
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();       // id epic    - epic
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -58,7 +58,8 @@ public class InMemoryTaskManager implements TasksManager {
     public void deleteAllEpic() {
         if (epics.isEmpty()) return;
         deleteAllSubtask();
-        for (Integer idEpic : epics.keySet()) {
+        Set<Integer> copy = new HashSet<>(epics.keySet());
+        for (Integer idEpic : copy) {
             deleteEpic(idEpic);
             historyManager.removeTask(idEpic);
         }
@@ -100,7 +101,7 @@ public class InMemoryTaskManager implements TasksManager {
     @Override
     public Integer addNewSubtask(Subtask subtask) {
         // 1) Проверить существование Epic
-         Epic epic = epics.get(subtask.getEpicId());
+        Epic epic = epics.get(subtask.getEpicId());
         if (epic == null) {
             return -1;
         } else {
