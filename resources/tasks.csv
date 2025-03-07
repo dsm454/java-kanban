@@ -1,7 +1,7 @@
 id,type,name,status,description,epic
-32,TASK,Задача 2!,NEW,Описание задачи 2
-31,TASK,Задача 1!,NEW,Описание задачи 1
-33,EPIC,epic 1,NEW,epic 1 dsc
-34,SUBTASK,name subtask1,NEW,descr1 subtask1 Epic 1,33
-35,SUBTASK,name subtask2,NEW,descr2 subtask2 Epic 1,33
-36,SUBTASK,name subtask3,NEW,descr3 subtask3 Epic 1,33
+13,TASK,Задача 1!,NEW,Описание задачи 1
+14,TASK,Задача 2!,NEW,Описание задачи 2
+15,EPIC,epic 1,NEW,epic 1 dsc
+16,SUBTASK,name subtask1,NEW,descr1 subtask1 Epic 1,15
+17,SUBTASK,name subtask2,NEW,descr2 subtask2 Epic 1,15
+18,SUBTASK,name subtask3,NEW,descr3 subtask3 Epic 1,15

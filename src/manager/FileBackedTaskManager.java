@@ -7,6 +7,7 @@ import tasks.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -19,10 +20,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     // Статический метод который без создания объекта типа FileBackedTaskManager,
     // генерирует его из файла (аналог конструктора реализованный через статический метод)
     public static FileBackedTaskManager loadFromFile(File file) {
+
+        if (!Files.exists(file.toPath())) {
+            try {
+                Files.createFile(file.toPath());
+            } catch (Exception exp) {
+                System.out.println("Не удалось создать файл");
+            }
+        }
+
         final FileBackedTaskManager taskManagerFromFile = new FileBackedTaskManager(file);
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             String line;
-            int countLine = 0;
             fileReader.readLine();
             while (fileReader.ready()) {
                 line = fileReader.readLine();
