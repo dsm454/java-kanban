@@ -17,4 +17,11 @@ class ManagersTest {
         HistoryManager historyManager = Managers.getDefaultHistory();
         assertNotNull(historyManager, "Экземпляр HistoryManager должен быть проинициализирован.");
     }
+
+    @Test
+    void ShouldReturnInitializedInstancesFileBackedTaskManager() {
+        FileBackedTaskManager fileBackedTaskManager = Managers.getDefaultFileBacked();
+        assertNotNull(fileBackedTaskManager, "Экземпляр FileBackedTaskManager должен быть проинициализирован.");
+    }
+
 }

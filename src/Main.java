@@ -3,10 +3,28 @@ import tasks.Subtask;
 import tasks.Task;
 import manager.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+
 public class Main {
 
     public static void main(String[] args) {
-        TasksManager manager = Managers.getDefault();
+        File file = new File("./resources/tasks.csv");
+        printFromFile(file, "*********** Начальное Содержимое файла *********** ");
+        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(file);
+        printAllTasks(manager, "*********** Менеджер после загрузки задач из файла ************");
+
+        manager.deleteAllEpic();
+        manager.deleteAllTask();
+        System.out.println();
+        printAllTasks(manager, "*********** Менеджер после удаления всех задач *************");
+        printFromFile(file, "*********** Содержимое файла после удаления всех задач и эпиков *********** ");
+
+        // проверить сохранение нескольких задач
         // 1. Создайте две задачи,
         Task task1 = new Task("Задача 1!", "Описание задачи 1");
         Task task2 = new Task("Задача 2!", "Описание задачи 2");
@@ -23,43 +41,13 @@ public class Main {
         manager.addNewSubtask(subtask2ForEpic1);
         manager.addNewSubtask(subtask3ForEpic1);
 
-        // 2. Запросите созданные задачи несколько раз в разном порядке.
-        // 3. После каждого запроса выведите историю и убедитесь, что в ней нет повторов.
-        manager.getTask(task1.getId());
-        manager.getTask(task2.getId());
-        manager.getEpic(epic1.getId());
-        manager.getSubtask(subtask1ForEpic1.getId());
-        manager.getSubtask(subtask2ForEpic1.getId());
-        manager.getSubtask(subtask3ForEpic1.getId());
-        printHistory(manager);
+        printAllTasks(manager, "*********** Менеджер после добавления задач и эпиков *************");
+        printFromFile(file, "*********** Содержимое файла после добавления задач и эпиков *********** ");
 
-        manager.getTask(task1.getId());
-        manager.getTask(task1.getId());
-        manager.getTask(task2.getId());
-        manager.getTask(task2.getId());
-        manager.getEpic(epic1.getId());
-        manager.getEpic(epic1.getId());
-        manager.getSubtask(subtask1ForEpic1.getId());
-        manager.getSubtask(subtask2ForEpic1.getId());
-        manager.getSubtask(subtask3ForEpic1.getId());
-        manager.getSubtask(subtask1ForEpic1.getId());
-        manager.getSubtask(subtask2ForEpic1.getId());
-        manager.getSubtask(subtask3ForEpic1.getId());
-        System.out.println("Убедитесь, что в истории нет повторов");
-        printHistory(manager);
-
-        // 4. Удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться.
-        manager.deleteTask(task1.getId());
-        System.out.println("Уадалена задача task1, проверить что ее нет в истории.");
-        printHistory(manager);
-
-        // 5. Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
-        manager.deleteEpic(epic1.getId());
-        System.out.println("Удален эпик с тремя подзадачами, убедиться, что из истории удалился как сам эпик, так и все его подзадачи.");
-        printHistory(manager);
     }
 
-    private static void printAllTasks(TasksManager manager) {
+    private static void printAllTasks(TasksManager manager, String message) {
+        System.out.println(message);
         System.out.println(" ### Задачи:");
         for (Task task : manager.getTasks()) {
             System.out.println(task);
@@ -76,6 +64,7 @@ public class Main {
         for (Task subtask : manager.getSubtasks()) {
             System.out.println(subtask);
         }
+        System.out.println("#".repeat(40));
     }
 
     private static void printHistory(TasksManager manager) {
@@ -87,5 +76,17 @@ public class Main {
         System.out.println("Количество просмотров в истории " + manager.getHistory().size());
         System.out.println("Количество объектов в менеджере " + (manager.getSubtasks().size() + manager.getEpics().size() + manager.getTasks().size()));
         System.out.println("-".repeat(40));
+    }
+
+    private static void printFromFile(File file, String message) {
+        System.out.println(message);
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+            while (fileReader.ready()) {
+                System.out.println(fileReader.readLine());
+            }
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка во время чтения файла.");
+        }
+        System.out.println();
     }
 }
