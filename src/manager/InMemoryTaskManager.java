@@ -98,21 +98,23 @@ public class InMemoryTaskManager implements TasksManager {
     // d. Создание. Сам объект должен передаваться в качестве параметра.
     @Override
     public int addNewTask(Task task) {
-        if (task.getStartTime() != null && !isTaskOverlap(task)) {
-            final int id = ++generatorId;
-            task.setId(id);
-            tasks.put(id, task);
-            prioritizedTasks.add(task);
-            return id;
-        } else
+        if (task.getStartTime() != null && isTaskOverlap(task)) {
             return -1;
+        }
+        final int id = ++generatorId;
+        task.setId(id);
+        tasks.put(id, task);
+        if (task.getStartTime() != null && !isTaskOverlap(task)) {
+            prioritizedTasks.add(task);
+        }
+        return id;
     }
 
     @Override
     public Integer addNewSubtask(Subtask subtask) {
         // 1) Проверить существование Epic
         Epic epic = epics.get(subtask.getEpicId());
-        if (epic == null || subtask.getStartTime() == null || isTaskOverlap(subtask)) {
+        if (epic == null || ((subtask.getStartTime() != null && isTaskOverlap(subtask)))) {
             return -1;
         } else {
             final int id = ++generatorId;
@@ -122,7 +124,9 @@ public class InMemoryTaskManager implements TasksManager {
             subtasks.put(id, subtask); // 2. добавляем в HasMap subtasks новой подзадачи
             updateEpicStatus(epic);
             updateEpicTime(epic);
-            prioritizedTasks.add(subtask);
+            if (subtask.getStartTime() != null && !isTaskOverlap(subtask)) {
+                prioritizedTasks.add(subtask);
+            }
             return id;
         }
     }
@@ -138,18 +142,24 @@ public class InMemoryTaskManager implements TasksManager {
     // e. Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
     @Override
     public void updateTask(Task task) {
-        if (tasks.containsKey(task.getId()) && task.getStartTime() != null && !isTaskOverlap(task)) {
-            tasks.put(task.getId(), task);
+        if (!tasks.containsKey(task.getId()) || (task.getStartTime() != null && isTaskOverlap(task))) {
+            return;
+        }
+        tasks.put(task.getId(), task);
+        if (task.getStartTime() != null && !isTaskOverlap(task)) {
             prioritizedTasks.add(task);
         }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        if (subtasks.containsKey(subtask.getId()) && subtask.getStartTime() != null && !isTaskOverlap(subtask)) {
-            subtasks.put(subtask.getId(), subtask);
-            updateEpicStatus(epics.get(subtask.getEpicId()));
-            updateEpicTime(epics.get(subtask.getEpicId()));
+        if (!subtasks.containsKey(subtask.getId()) || (subtask.getStartTime() != null && isTaskOverlap(subtask))) {
+            return;
+        }
+        subtasks.put(subtask.getId(), subtask);
+        updateEpicStatus(epics.get(subtask.getEpicId()));
+        updateEpicTime(epics.get(subtask.getEpicId()));
+        if (subtask.getStartTime() != null && !isTaskOverlap(subtask)) {
             prioritizedTasks.add(subtask);
         }
     }
@@ -157,8 +167,6 @@ public class InMemoryTaskManager implements TasksManager {
     @Override
     public void updateEpic(Epic newEpic) {
         if (epics.containsKey(newEpic.getId())) {
-//            epics.get(newEpic.getId()).setName(newEpic.getName());
-//            epics.get(newEpic.getId()).setDescription(newEpic.getDescription());
             epics.put(newEpic.getId(), newEpic);
         }
     }
@@ -264,7 +272,7 @@ public class InMemoryTaskManager implements TasksManager {
         return new ArrayList<>(prioritizedTasks);
     }
 
-    private boolean isTaskOverlap(Task task) {
+    public boolean isTaskOverlap(Task task) {
         // true - есть пересечение задач
         if (getPrioritizedTasks().isEmpty()) return false;
         return getPrioritizedTasks().stream().filter(chekTask -> task.getId() != chekTask.getId())
