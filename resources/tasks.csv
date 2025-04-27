@@ -1,7 +1,6 @@
-id,type,name,status,description,epic
-13,TASK,Задача 1!,NEW,Описание задачи 1
-14,TASK,Задача 2!,NEW,Описание задачи 2
-15,EPIC,epic 1,NEW,epic 1 dsc
-16,SUBTASK,name subtask1,NEW,descr1 subtask1 Epic 1,15
-17,SUBTASK,name subtask2,NEW,descr2 subtask2 Epic 1,15
-18,SUBTASK,name subtask3,NEW,descr3 subtask3 Epic 1,15
+id,type,name,status,description,starttime,duration,epic
+40,TASK,Задача 2!,NEW,Описание задачи 2,null,PT0S
+41,TASK,Задача 3!,NEW,Описание задачи 3,2099-12-20T10:15,PT7M
+42,EPIC,epic 1,NEW,epic 1 dsc,2025-04-10T12:10,PT2H10M
+43,SUBTASK,name subtask1,NEW,descr1 subtask1 Epic 1,2025-04-10T12:10,PT2H,42
+44,SUBTASK,name subtask3,NEW,descr3 subtask3 Epic 1,2025-07-10T12:10,PT10M,42

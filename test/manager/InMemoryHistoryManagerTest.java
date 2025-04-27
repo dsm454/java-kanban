@@ -3,8 +3,12 @@ package manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
+import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,16 +24,24 @@ class InMemoryHistoryManagerTest {
     @BeforeEach
     void createManagerAndTasks() {
         manager = Managers.getDefault();
-        task1 = new Task("Задача 1", "Описание задачи 1");
-        task2 = new Task("Задача 2", "Описание задачи 2");
+
+        task1 = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(5)
+                , LocalDateTime.now(), 1, Status.IN_PROGRESS);
+        task2 = new Task("Задача 2", "Описание задачи 2", Duration.ofMinutes(5)
+                , LocalDateTime.now().plusMinutes(10), 2, Status.IN_PROGRESS);
         manager.addNewTask(task1);
         manager.addNewTask(task2);
-        epic1 = new Epic("Эпик 1", "Описане эпика 1");
+
+        epic1 = new Epic("Эпик 1", "Описание эпика 1");
         manager.addNewEpic(epic1);
-        subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", epic1.getId());
-        subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", epic1.getId());
+
+        subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1"
+                , Duration.ofMinutes(5), LocalDateTime.now().plusMinutes(45), -1, Status.NEW, epic1.getId());
+        subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2"
+                , Duration.ofMinutes(5), LocalDateTime.now().plusMinutes(60), -1, Status.NEW, epic1.getId());
         manager.addNewSubtask(subtask1);
         manager.addNewSubtask(subtask2);
+
     }
 
     @Test
